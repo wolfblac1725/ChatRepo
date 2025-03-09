@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "723369345201",
+    "project_id": "chatexamen-64abf",
+    "storage_bucket": "chatexamen-64abf.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:723369345201:android:c2bb989123e7bc6d1da290",
+        "android_client_info": {
+          "package_name": "com.erik.canseco.chatexamen"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDD1qiW5Scq-GPT7Z2YYLUBjRuPe3p2wAw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

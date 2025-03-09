@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">ChatExamen</string>
+    <string name="user_name">Correo</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="login_error">"Error de credenciales favor de verificar "</string>
+    <string name="empty_chat">No tiene ningun Chat</string>
+</resources>
