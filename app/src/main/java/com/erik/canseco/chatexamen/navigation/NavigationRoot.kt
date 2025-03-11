@@ -4,46 +4,45 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
-import com.erik.canseco.chatexamen.presentation.screen.detail.DetailChatScreen
+import com.erik.canseco.chatexamen.presentation.screen.detail.DetailChatScreenRoot
+import com.erik.canseco.chatexamen.presentation.screen.detail.DetailChatViewModel
 import com.erik.canseco.chatexamen.presentation.screen.home.HomeScreenRoot
 import com.erik.canseco.chatexamen.presentation.screen.home.HomeViewModel
 import com.erik.canseco.chatexamen.presentation.screen.login.LoginScreenRoot
 import com.erik.canseco.chatexamen.presentation.screen.login.LoginViewModel
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
 
 @Composable
 fun NavigationRoot(
-    navController: NavHostController,
-    auth: FirebaseAuth,
-    db: FirebaseFirestore
+    navController: NavHostController
 ) {
     Box(
         modifier = Modifier
             .fillMaxSize()
     ){
+        val start = if(Firebase.auth.currentUser?.uid == null) Login else Home
         NavHost(
             navController = navController,
-            startDestination = Login
+            startDestination = start
         ){
             composable<Login> {
-                val viewModel = LoginViewModel()
+                val viewModel: LoginViewModel = hiltViewModel()
                 LoginScreenRoot(
                     viewModel = viewModel,
                     navigateToHome = {
                         navController.navigate(Home)
-                    },
-                    auth = auth,
+                    }
                 )
             }
             composable<Home> {
-                val viewModel = HomeViewModel(auth = auth,
-                    db = db)
+                val viewModel: HomeViewModel = hiltViewModel()
                 HomeScreenRoot(
                     viewModel = viewModel,
                     detailChat = { id ->
@@ -53,11 +52,13 @@ fun NavigationRoot(
             }
             composable<DetailChat> { backStackEntry ->
                 val detailId: DetailChat = backStackEntry.toRoute()
-                DetailChatScreen(
+                val viewModel: DetailChatViewModel = hiltViewModel()
+                DetailChatScreenRoot(
                     indexChat= detailId.id,
                     onBack = {
                         navController.popBackStack()
-                    }
+                    },
+                    viewModel = viewModel
                 )
             }
 

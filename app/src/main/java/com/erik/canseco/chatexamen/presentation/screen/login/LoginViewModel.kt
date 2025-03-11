@@ -4,13 +4,27 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import com.google.firebase.auth.FirebaseAuth
+import androidx.lifecycle.viewModelScope
+import com.erik.canseco.chatexamen.domain.AuthDataSource
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-
-class LoginViewModel : ViewModel() {
+@HiltViewModel
+class LoginViewModel @Inject constructor(
+ private val auth : AuthDataSource
+) : ViewModel() {
 
     var state by mutableStateOf(LoginDataState())
         private set
+
+    init {
+        viewModelScope.launch {
+            state = state.copy(
+                isLogging = auth.current != null
+            )
+        }
+    }
 
     fun onUserNameChanged(userName: String) {
         state = state.copy(userName = userName)
@@ -27,14 +41,16 @@ class LoginViewModel : ViewModel() {
     }
     fun onLoginClicked(
         navigateToHome: () -> Unit,
-        auth: FirebaseAuth
     ) {
-        auth.signInWithEmailAndPassword(state.userName, state.password).addOnCompleteListener { task ->
-            if(task.isSuccessful){
-                navigateToHome()
-            } else {
-               onErrorMessageSet(true)
-            }
+        viewModelScope.launch {
+            auth.loginWithEmailAndPassword(state.userName.trim(), state.password.trim(), {
+                isLogin ->
+                if (isLogin){
+                    navigateToHome()
+                } else {
+                    onErrorMessageSet(true)
+                }
+            })
         }
     }
 }
