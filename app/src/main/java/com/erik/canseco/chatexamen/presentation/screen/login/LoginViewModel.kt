@@ -43,14 +43,14 @@ class LoginViewModel @Inject constructor(
         navigateToHome: () -> Unit,
     ) {
         viewModelScope.launch {
-            auth.loginWithEmailAndPassword(state.userName.trim(), state.password.trim(), {
+            auth.loginWithEmailAndPassword(state.userName.trim(), state.password.trim()) {
                 isLogin ->
                 if (isLogin){
                     navigateToHome()
                 } else {
                     onErrorMessageSet(true)
                 }
-            })
+            }
         }
     }
 }

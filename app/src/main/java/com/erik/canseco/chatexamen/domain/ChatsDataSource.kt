@@ -6,4 +6,5 @@ import kotlinx.coroutines.flow.Flow
 interface ChatsDataSource {
     val listChats: Flow<List<Chat>>
     suspend fun getChatsUser()
+    suspend fun getChat(id: String, onChat: (Chat) -> Unit)
 }

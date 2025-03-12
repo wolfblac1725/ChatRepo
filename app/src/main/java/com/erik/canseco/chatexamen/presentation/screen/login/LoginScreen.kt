@@ -35,6 +35,24 @@ fun LoginScreenRoot(
     navigateToHome: () -> Unit
 ) {
     val state = viewModel.state
+    LoginScreen(
+        state = state,
+        onUserNameChanged = {
+            viewModel.onUserNameChanged(it)
+        },
+        onPasswordChanged = {
+            viewModel.onPasswordChanged(it)
+        },
+        onLoginClicked = {
+            viewModel.onLoginClicked(
+                navigateToHome,
+            )
+        },
+        onErrorMessage = {
+            viewModel.onErrorMessageSet()
+        },
+    )
+    /*val state = viewModel.state
 
         LoginScreen(
             state = state,
@@ -52,7 +70,7 @@ fun LoginScreenRoot(
             onErrorMessage = {
                 viewModel.onErrorMessageSet()
             },
-        )
+        )*/
 }
 
 

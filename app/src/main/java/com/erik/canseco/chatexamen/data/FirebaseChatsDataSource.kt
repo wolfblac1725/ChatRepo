@@ -20,8 +20,19 @@ class FirebaseChatsDataSource @Inject constructor(
     override suspend fun getChatsUser() {
         database.get().addOnCompleteListener {
             if (it.isSuccessful) {
-                it.result.getValue<List<Chat>>()?.let {
-                    chatList.value = it
+                it.result.getValue<List<Chat>>()?.let { listChat ->
+                    chatList.value = listChat
+                }
+            }
+        }
+    }
+
+override suspend fun getChat(id: String, onChat: (Chat) -> Unit) {
+    database.child((id.toInt()-1).toString())
+        .get().addOnCompleteListener {
+            if (it.isSuccessful) {
+                it.result.getValue<Chat>()?.let { listChat ->
+                    onChat(listChat)
                 }
             }
         }
